@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import java.util.UUID;
 @Builder
-public record UserRespone(
+public record UserResponse(
         UUID id,
         String fullname,
         Boolean isActive

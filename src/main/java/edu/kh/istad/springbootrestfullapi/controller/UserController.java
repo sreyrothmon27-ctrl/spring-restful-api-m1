@@ -1,9 +1,7 @@
 package edu.kh.istad.springbootrestfullapi.controller;
 
 import edu.kh.istad.springbootrestfullapi.dto.UserCreateRequest;
-import edu.kh.istad.springbootrestfullapi.dto.UserRespone;
-import edu.kh.istad.springbootrestfullapi.model.User;
-import edu.kh.istad.springbootrestfullapi.repository.UserRepository;
+import edu.kh.istad.springbootrestfullapi.dto.UserResponse;
 import edu.kh.istad.springbootrestfullapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,27 +19,29 @@ public class UserController {
     private final UserService userService;
 
    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
 
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id){
         userService.deleteById(id);
     }
 
 
    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
 
-    public UserRespone create(@RequestBody UserCreateRequest userCreateRequest) {
-//        System.out.println("userCreateRequest: " + userCreateRequest);
+    @PostMapping
+    public UserResponse create(@RequestBody UserCreateRequest userCreateRequest) {
        return userService.create(userCreateRequest);
     }
 
 
     @GetMapping
-
-    public List<UserRespone>getAll() {
+    public List<UserResponse>getAll() {
         return userService.getAll();
 
+    }
+    @GetMapping("/{id}")
+    public UserResponse getById(@PathVariable UUID id){
+       return userService.getById(id);
     }
 
 

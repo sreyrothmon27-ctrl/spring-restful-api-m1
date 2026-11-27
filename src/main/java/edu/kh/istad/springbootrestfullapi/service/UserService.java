@@ -1,8 +1,7 @@
 package edu.kh.istad.springbootrestfullapi.service;
 
 import edu.kh.istad.springbootrestfullapi.dto.UserCreateRequest;
-import edu.kh.istad.springbootrestfullapi.dto.UserRespone;
-import edu.kh.istad.springbootrestfullapi.model.User;
+import edu.kh.istad.springbootrestfullapi.dto.UserResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,10 +18,13 @@ public interface UserService {
 public void deleteById(UUID id);
 
 
-    UserRespone create(UserCreateRequest userCreateRequest);
+    UserResponse create(UserCreateRequest userCreateRequest);
 
-    List<UserRespone>getAll();
+    List<UserResponse>getAll();
 
-    User getById(UUID id);
+    UserResponse getById(UUID id);
+
+
+
 
 }

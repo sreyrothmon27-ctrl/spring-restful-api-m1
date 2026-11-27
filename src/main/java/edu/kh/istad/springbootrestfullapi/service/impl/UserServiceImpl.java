@@ -1,82 +1,79 @@
 package edu.kh.istad.springbootrestfullapi.service.impl;
 
 import edu.kh.istad.springbootrestfullapi.dto.UserCreateRequest;
-import edu.kh.istad.springbootrestfullapi.dto.UserRespone;
+import edu.kh.istad.springbootrestfullapi.dto.UserResponse;
 import edu.kh.istad.springbootrestfullapi.model.User;
 import edu.kh.istad.springbootrestfullapi.repository.UserRepository;
 import edu.kh.istad.springbootrestfullapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.PublicKey;
+
 import java.util.List;
 import java.util.UUID;
 
-
 @Service
 @RequiredArgsConstructor
+@Slf4j
 
 
- public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
     @Override
-    public void deleteById(UUID id){
-        if (!userRepository.checkById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
+    public void deleteById(UUID id) {
 
-        userRepository.deleteOne(id);
     }
 
 
-
-
     @Override
-    public UserRespone create(UserCreateRequest userCreateRequest) {
-
-        // 1.map data from dto to domain model
-
+    public UserResponse create(UserCreateRequest userCreateRequest) {
         User user=new User();
+        user.setFullname(userCreateRequest.fullname());
         user.setUsername(userCreateRequest.username());
         user.setPassword(userCreateRequest.password());
-        user.setFullname(userCreateRequest.fullname());
+        user.setIsActive(true);
 
-        // 2. manage system data
-        user.setId(UUID.randomUUID());
-        user.setActive(true);
+       User savedUser = userRepository.save(user);
+        log.info("After saving user: {} ",user.getId());
 
-        // 3.save data
-        userRepository.insertOne(user);
 
-        //4.Map data from domain model to dto
-        return new UserRespone(
-                user.getId(),
-                user.getFullname(),
-                user.isActive()
-        );
-
+        return UserResponse.builder()
+                .id(savedUser.getId())
+                .fullname(savedUser.getFullname())
+                .isActive(savedUser.getIsActive())
+                .build();
     }
 
     @Override
-    public List<UserRespone> getAll() {
-        return userRepository.selectAll()
+    public List<UserResponse> getAll() {
+        return userRepository.findAll()
                 .stream()
-                .map(user -> new UserRespone(
-                        user.getId(),
-                        user.getFullname(),
-                        user.isActive()
-                ))
-                .toList();
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .fullname(user.getFullname())
+                        .isActive(user.getIsActive())
+                        .build())
+                .toList() ;
 
     }
 
     @Override
-    public User getById(UUID id) {
-        return null;
-    }
-}
+    public UserResponse getById(UUID id){
+        return userRepository.findById(id)
+                .map(user ->  UserResponse.builder()
+                        .id(user.getId())
+                        .fullname(user.getFullname())
+                        .isActive(user.getIsActive())
+                        .build())
+                .orElseThrow(()->new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"
+                ));
+    }}
+

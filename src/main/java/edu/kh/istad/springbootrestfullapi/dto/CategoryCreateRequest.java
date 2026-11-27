@@ -1,4 +1,9 @@
 package edu.kh.istad.springbootrestfullapi.dto;
 
-public record CategoryRequest() {
+public record CategoryCreateRequest<icon>(
+        String name,
+        String icon
+
+) {
+
 }

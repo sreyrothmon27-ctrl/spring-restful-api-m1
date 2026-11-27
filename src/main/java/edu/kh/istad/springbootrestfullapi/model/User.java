@@ -1,5 +1,6 @@
 package edu.kh.istad.springbootrestfullapi.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,16 +10,24 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "m1_users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    public class User{
-        private UUID id;
-        private String username;
-        private String password;
-        private String fullname;
-        private boolean isActive;
+    @Column(unique = true, nullable = false, length = 50)
+    private String username;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
+    private String fullname;
+    @Column(nullable = false)
+    private Boolean isActive;
 
-
-    }
+    @OneToOne(mappedBy = "user")
+    private Customer customer;
+}
 

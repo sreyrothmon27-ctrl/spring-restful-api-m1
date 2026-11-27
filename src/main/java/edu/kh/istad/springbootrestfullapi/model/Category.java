@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Setter
 @Getter
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name="m1_catagories")
 
-public class Catagory {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
